@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+
+<html ng-app = 'myApp'>
+<head>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+<title>Hearthstone Deck Database</title>
+</head>
+<body style='background-color:#e6e6e6'>
+
+	<img src="Hearthstone_Logo.png" class='center-block'>
+
+	<div class='container' ng-controller='AppCtrl'>
+		<ui-view></ui-view>			
+	</div>
+
+<script type='text/ng-template' id='/home.html'>
+	<div class='page-header'>
+		<h1 align='center'>Hearthstone Deck Builder</h1>
+			<table class='table'>
+				<thead>
+					<tr>
+						<th>Deck name</th>
+						<th>Author</th>
+						<th>Class</th>
+					</tr>
+				</thead>
+				<tbody>
+						<!--Deck info input/ button to clear info-->
+					<tr>
+						<td><input class='form-control' ng-model='deck.deckName'></td>
+						<td><input class='form-control' ng-model='deck.author'></td>
+						<td><input class='form-control' ng-model='deck.class'></td>							
+						<td><button class='btn btn-info' ng-click='clearDeckInfo()'>Clear Info</button></td>
+					</tr>
+						<!--List all current Decks in database and add buttons to remove and edit a deck-->
+					<tr ng-repeat="deck in decksList">
+						<td>{{deck.deckName}}</td>
+						<td>{{deck.author}}</td>
+						<td>{{deck.class}}</td>
+						<td><button class='btn btn-danger' ng-click='removeDeck(deck._id)'>Remove</button></td>
+						<td><button class='btn btn-warning' ng-click='editDeck(deck._id)'>Edit</button></td>
+					</tr>
+				</tbody>
+			</table>
+	</div>
+
+	<!--Creates the card list to add cards to the deck-->
+  	<div class='col-md-6'>
+    	<table class='table table-hover' border='2'>
+    		<thead>
+    			<h2>Collectible Card List</h2>
+					<tr>
+						<th>name</th>
+						<th>type</th>
+						<th>cost</th>
+						<th>attack</th>
+						<th>health</th>
+						<th>text</th>
+					</tr>
+			</thead>
+			<tbody>
+    				<tr ng-repeat='card in cardList | orderBy:["cost","name"]' ng-click='addToDeck(card)'>
+						<td>{{card.name}}</td>
+						<td>{{card.type.toLowerCase()}}</td>
+						<td><font color="blue">{{card.cost}}</font></td>
+						<td><font color="#808000">{{card.attack}}</font></td>
+						<td><font color="red">{{card.type === 'WEAPON' ? card.durability : card.health}}</font></td>
+						<td ng-bind-html='card.text'></td>
+		
+					</tr>
+			</tbody>
+		</table>
+    </div>
+
+    <!--Creates and fills/removes cards from deck as selected-->
+    <div class='col-md-6'>
+    	<table class='table table-hover' border='2'>
+    		<thead>
+    			<h2 Class='btn-toolbar'>{{deckList[0] === '' ? 'New Deck' : deck.deckName}}
+    					<button type='button' class='btn btn-info pull-right' ng-click='clearDeck()'>Clear Deck</button>
+    					<button type='button' class='btn btn-primary pull-right' ng-click='saveDeck()'>Save Deck</button>    					
+    			</h2>
+					<tr>
+						<th>name</th>
+						<th>type</th>
+						<th>cost</th>
+						<th>attack</th>
+						<th>health</th>
+						<th>text</th>
+					</tr>
+			</thead>
+
+			<tbody>
+					<tr ng-repeat='card in deckList | limitTo:30 | orderBy:["cost","name"] track by $index' ng-click='removeFromDeck(card)'>
+						<td>{{card.name}}</td>
+						<td>{{card.type.toLowerCase()}}</td>
+						<td><font color="blue">{{card.cost}}</font></td>
+						<td><font color="#808000">{{card.attack}}</font></td>
+						<td><font color="red">{{card.type === 'WEAPON' ? card.durability : card.health}}</font></td>
+						<td ng-bind-html='card.text'></td>
+					</tr>	
+			</tbody>
+    	</table>
+ 	</div>
+</script>
+
+<script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.18/angular-ui-router.min.js'></script>
+<script src='controllers/controller.js'></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-sanitize.js"></script>
+
+</body>
+</html>
