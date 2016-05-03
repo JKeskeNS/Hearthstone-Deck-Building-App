@@ -65,13 +65,13 @@
 					</tr>
 			</thead>
 			<tbody>
-    				<tr ng-repeat='card in cardList | orderBy:["cost","name"]' ng-click='addToDeck(card)'>
-						<td>{{card.name}}</td>
-						<td>{{card.type.toLowerCase()}}</td>
-						<td><font color="blue">{{card.cost}}</font></td>
-						<td><font color="#808000">{{card.attack}}</font></td>
-						<td><font color="red">{{card.type === 'WEAPON' ? card.durability : card.health}}</font></td>
-						<td ng-bind-html='card.text'></td>
+    				<tr ng-repeat='card in cardList | orderBy:["card.cost","card.name"]' ng-click='addToDeck(card)'>
+						<td>{{card.card.name}}</td>
+						<td>{{card.card.type.toLowerCase()}}</td>
+						<td><font color="blue">{{card.card.cost}}</font></td>
+						<td><font color="#808000">{{card.card.attack}}</font></td>
+						<td><font color="red">{{card.card.type === 'WEAPON' ? card.card.durability : card.card.health}}</font></td>
+						<td ng-bind-html='card.card.text'></td>
 		
 					</tr>
 			</tbody>

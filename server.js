@@ -14,6 +14,7 @@ app.use(bodyParser.urlencoded({ extended: true}));
 app.use(bodyParser.json());
 
 var Deck = require('./public/models/deck');
+var Card = require('./public/models/card')
 // routes for api
 var router = express.Router();
 
@@ -98,6 +99,17 @@ router.route('/decks/:deck_id')
                 res.json({ message: 'Successfully deleted user' });
             } else {
             	res.send(err);
+            }
+        });
+    });
+
+router.route('/cards')
+    .get(function(req,res){
+        Card.find(function(err, cards){
+            if(!err){
+                res.json(cards);
+            } else {
+                res.send(err);
             }
         });
     });
